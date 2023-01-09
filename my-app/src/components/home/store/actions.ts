@@ -4,7 +4,27 @@ import { ProductActionTypes, ProductActions } from './types';
 import http from '../../../http_common';
 
 
+export const LoadProducts = (name: string = '', page: number = 1) => {
+	return async (dispatch: Dispatch<ProductActions>) => {
+		try {
 
+			dispatch({ type: ProductActionTypes.PRODUCT_ADD });
+
+			const data = await http.get("/api/products", { params: { name: name, page: page } });
+			dispatch({
+				type: ProductActionTypes.PRODUCT_LIST,
+				list: data.data.data,
+				pages: data.data.last_page
+			});
+		}
+		catch (e) {
+			dispatch({
+				type: ProductActionTypes.SERVER_USER_ERROR,
+				payload: "Unknown error",
+			});
+		}
+	};
+};
 export const CreateProduct = (post: any) => {
 	return async (dispatch: Dispatch<ProductActions>) => {
 		try {
@@ -23,7 +43,7 @@ export const CreateProduct = (post: any) => {
 
 			} else {
 				dispatch({
-					type: ProductActionTypes.CREATE_SUCCESS,
+					type: ProductActionTypes.PRODUCT_ADD_SUCCESS,
 					payload: data.data.message,
 
 				});

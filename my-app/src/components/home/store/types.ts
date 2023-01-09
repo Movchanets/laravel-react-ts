@@ -6,16 +6,17 @@ export interface IProductItem {
 
 export interface IProductState {
     list: Array<IProductItem>
-
+    pages: number
 }
 
 export enum ProductActionTypes {
     PRODUCT_LIST = "PRODUCT_LIST",
     PRODUCT_ADD = "PRODUCT_ADD",
+    PRODUCT_ADD_SUCCESS = "PRODUCT_ADD_SUCCESS",
     PRODUCT_DELETE = "PRODUCT_DELETE",
 
     CREATE_SUCCESS = "CREATE_SUCCESS",
-    DELETE_SUCCESS = "CREATE_SUCCESS",
+    DELETE_SUCCESS = "DELETE_SUCCESS",
     ERROR_MSG = "ERROR_MSG",
     SERVER_USER_ERROR = "SERVER_USER_ERROR"
 }
@@ -23,6 +24,11 @@ export enum ProductActionTypes {
 interface Error_MSG {
     type: ProductActionTypes.ERROR_MSG,
     payload: any
+}
+interface LoadProductList {
+    type: ProductActionTypes.PRODUCT_LIST,
+    list: any
+    pages: any
 }
 interface ServerUserErrorAction {
     type: ProductActionTypes.SERVER_USER_ERROR,
@@ -43,6 +49,10 @@ interface DeleteProductActionSuccess {
     type: ProductActionTypes.DELETE_SUCCESS,
     message: string
 }
+interface PRODUCT_ADD_SUCCESS {
+    type: ProductActionTypes.PRODUCT_ADD_SUCCESS,
+    payload: string
+}
 interface DeleteProductAction {
     type: ProductActionTypes.PRODUCT_DELETE,
 
@@ -53,3 +63,5 @@ export type ProductActions = Error_MSG
     | ProductADDAction
     | DeleteProductActionSuccess
     | DeleteProductAction
+    | PRODUCT_ADD_SUCCESS
+    | LoadProductList
