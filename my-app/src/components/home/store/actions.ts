@@ -1,30 +1,47 @@
 
 import { Dispatch } from "redux";
-import { ProductActionTypes, ProductActions } from './types';
+import { ProductActionTypes, ProductActions, IProductResponse, IProductSearch } from './types';
 import http from '../../../http_common';
 
+export const GetProductList = (search: IProductSearch) => async (dispatch: Dispatch<ProductActions>) => {
+	try {
+		const resp = await http.get<IProductResponse>("/api/products", { params: search });
+		const { data } = resp;
+		console.log(data);
+		dispatch({
+			type: ProductActionTypes.PRODUCT_LIST,
+			payload: {
+				list: data.data,
+				count_pages: data.last_page,
+				current_page: data.current_page,
+				total: data.total
+			}
+		});
+	} catch (error) {
+		dispatch({
+			type: ProductActionTypes.SERVER_USER_ERROR,
+			payload: "Unknown error",
+		});
+	}
+}
+// export const LoadProducts = (name: string = '', page: number = 1) => {
+// 	return async (dispatch: Dispatch<ProductActions>) => {
+// 		try {
 
-export const LoadProducts = (name: string = '', page: number = 1) => {
-	return async (dispatch: Dispatch<ProductActions>) => {
-		try {
+// 			dispatch({ type: ProductActionTypes.PRODUCT_ADD });
 
-			dispatch({ type: ProductActionTypes.PRODUCT_ADD });
-
-			const data = await http.get("/api/products", { params: { name: name, page: page } });
-			dispatch({
-				type: ProductActionTypes.PRODUCT_LIST,
-				list: data.data.data,
-				pages: data.data.last_page
-			});
-		}
-		catch (e) {
-			dispatch({
-				type: ProductActionTypes.SERVER_USER_ERROR,
-				payload: "Unknown error",
-			});
-		}
-	};
-};
+// 			const data = v
+// 			dispatch({
+// 				type: ProductActionTypes.PRODUCT_LIST,
+// 				list: data.data.data,
+// 				pages: data.data.last_page
+// 			});
+// 		}
+// 		catch (e) {
+// 			
+// 		}
+// 	};
+// };
 export const CreateProduct = (post: any) => {
 	return async (dispatch: Dispatch<ProductActions>) => {
 		try {

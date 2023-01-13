@@ -1,3 +1,4 @@
+
 export interface IProductItem {
     id: number | null,
     name: string,
@@ -5,10 +6,23 @@ export interface IProductItem {
 }
 
 export interface IProductState {
-    list: Array<IProductItem>
-    pages: number
-}
+    list: Array<IProductItem>,
+    total: number,
+    count_pages: number,
+    current_page: number,
 
+}
+export interface IProductResponse {
+    data: Array<IProductItem>,
+    current_page: number,
+    total: number,
+    last_page: number
+}
+export interface IProductSearch {
+    name?: string,
+    page?: number | string | null
+    pagination?: number | string | null
+}
 export enum ProductActionTypes {
     PRODUCT_LIST = "PRODUCT_LIST",
     PRODUCT_ADD = "PRODUCT_ADD",
@@ -25,11 +39,12 @@ interface Error_MSG {
     type: ProductActionTypes.ERROR_MSG,
     payload: any
 }
-interface LoadProductList {
-    type: ProductActionTypes.PRODUCT_LIST,
-    list: any
-    pages: any
+interface GetProductAction {
+    type: ProductActionTypes.PRODUCT_LIST
+    payload: IProductState
 }
+
+
 interface ServerUserErrorAction {
     type: ProductActionTypes.SERVER_USER_ERROR,
     payload: any
@@ -64,4 +79,4 @@ export type ProductActions = Error_MSG
     | DeleteProductActionSuccess
     | DeleteProductAction
     | PRODUCT_ADD_SUCCESS
-    | LoadProductList
+    | GetProductAction
